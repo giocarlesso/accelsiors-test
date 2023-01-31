@@ -12,13 +12,12 @@
                 </tr>
             </thead>
             <tbody v-if="tasks.length > 0" class="table-body">
-                <task-item
+                <tasks-list-item
                     v-for="task in tasks"
                     :key="task.id"
                     :task-item="task"
                 />
             </tbody>
-
             <tr v-else id="no-data">
                 <td colspan="5">Table is em</td>
             </tr>
@@ -27,13 +26,13 @@
 </template>
 
 <script>
-    import TaskItem from "@/components/TaskItem"
+    import TasksListItem from "@/components/TasksListItem"
 
     export default {
         name: "TasksList",
 
         components: {
-            TaskItem,
+            TasksListItem,
         },
         props: {
             tasks: {

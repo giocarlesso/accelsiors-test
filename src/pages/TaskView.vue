@@ -1,6 +1,7 @@
 <template>
     <div v-if="tasks">
         <tasks-list :tasks="tasks" />
+        <button @click="createTask()">New Task</button>
     </div>
 </template>
 
@@ -20,18 +21,26 @@
         },
 
         created() {
-            this.$http
-                .get("http://localhost:8888/test/getTasks")
-                //FIXME: adjust CORS message
-                .then(({ data }) => {
-                    this.tasks = data
-                    // console.log(this.tasks)
-                })
-                .catch(error => {
-                    //TODO: show error message on the screen
-                    //TODO: make a service for the requests?
-                    console.log(error)
-                })
+            this.fetchTasks()
+        },
+
+        methods: {
+            fetchTasks() {
+                this.$http
+                    .get("http://localhost:8888/test/getTasks")
+                    .then(({ data }) => {
+                        this.tasks = data
+                    })
+                    .catch(error => {
+                        //TODO: show error message on the screen
+                        //TODO: make a service for the requests?
+                        console.log(error)
+                    })
+            },
+
+            createTask() {
+                this.$router.push({ name: "TaskFormCreate" }).catch(() => {})
+            },
         },
     }
 </script>

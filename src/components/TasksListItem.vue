@@ -4,27 +4,23 @@
             <button @click="editTask()">Edit</button>
         </td>
         <td class="table-data">
-            <input v-if="isEditing" type="date" />
-            <span v-else>{{ taskItem.date | formatDate }}</span>
+            <span>{{ taskItem.date | formatDate }}</span>
         </td>
         <td class="table-data">
-            <input v-if="isEditing" type="number" />
-            <span v-else>{{ taskItem.duration }}</span>
+            <span>{{ taskItem.duration }}</span>
         </td>
         <td class="table-data">
-            <input v-if="isEditing" type="text" />
-            <span v-else>{{ taskItem.activity.name }}</span>
+            <span>{{ taskItem.activity.name }}</span>
         </td>
         <td class="table-data">
-            <textarea v-if="isEditing" />
-            <span v-else>{{ taskItem.comment }}</span>
+            <span>{{ taskItem.comment }}</span>
         </td>
     </tr>
 </template>
 
 <script>
     export default {
-        name: "TaskItem",
+        name: "TasksListItem",
 
         props: {
             taskItem: {
@@ -41,13 +37,18 @@
 
         data() {
             return {
-                isEditing: false,
+                activities: null,
             }
         },
 
         methods: {
             editTask() {
-                this.isEditing = true
+                this.$router
+                    .push({
+                        name: "TaskFormEdit",
+                        params: { task_id: this.taskItem.id },
+                    })
+                    .catch(() => {})
             },
         },
     }

@@ -1,17 +1,13 @@
 <template>
-  <div id="app">
-    <task-view />
-  </div>
+    <div id="app">
+        <router-view />
+    </div>
 </template>
 
 <script>
-
-  import TaskView from "@/pages/TaskView";
-export default {
-  name: 'App',
-  components: {TaskView}
-}
+    export default {
+        name: "App",
+    }
 </script>
 
-<style>
-</style>
+<style></style>
