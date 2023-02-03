@@ -19,6 +19,7 @@
 <script>
     import TasksList from "@/components/TasksList.vue"
     import AlertNotifications from "@/components/AlertNotifications"
+    import TasksService from "../services/tasks"
 
     export default {
         name: "TaskView",
@@ -52,8 +53,7 @@
                 }, 3000)
             },
             fetchTasks() {
-                this.$http
-                    .get("http://localhost:8888/test/getTasks")
+                TasksService.listTasks()
                     .then(({ data }) => {
                         this.tasks = data
                         this.updateAlert(
@@ -63,7 +63,6 @@
                         )
                     })
                     .catch(error => {
-                        //TODO: make a service for the requests?
                         this.updateAlert("Error", error.message, "error")
                     })
             },

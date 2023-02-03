@@ -56,6 +56,8 @@
 
 <script>
     import AlertNotifications from "@/components/AlertNotifications"
+    import TasksService from "../services/tasks"
+    import ActivitiesService from "../services/activities"
 
     export default {
         name: "TaskForm",
@@ -106,13 +108,11 @@
                 }, 3000)
             },
             fetchActivities() {
-                this.$http
-                    .get("http://localhost:8888/test/getActivities")
+                    ActivitiesService.listActivities()
                     .then(({ data }) => {
                         this.activities = data
                     })
                     .catch(error => {
-                        //TODO: make a service for the requests?
                         this.updateAlert(
                             "Error",
                             `Activities failed do load\n ${error.message}`,
@@ -121,14 +121,17 @@
                     })
             },
             fetchTasks() {
-                this.$http
-                    .get("http://localhost:8888/test/getTasks")
+                TasksService.listTasks()
                     .then(({ data }) => {
                         this.tasks = data
+                        this.updateAlert(
+                            "Success",
+                            "Tasks loaded sucessfully",
+                            "success"
+                        )
                         this.fillForm()
                     })
                     .catch(error => {
-                        //TODO: make a service for the requests?
                         this.updateAlert("Error", error.message, "error")
                     })
             },
@@ -147,13 +150,9 @@
                     comment: this.comment,
                 }
 
-                const headers = {
-                    "Content-Type": "application/json",
-                }
-
                 this.$http
                     .post("http://localhost:8888/test/saveTask", payload, {
-                        headers: headers,
+                        
                     })
                     .then(() => {
                         this.updateAlert(
