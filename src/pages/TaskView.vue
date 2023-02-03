@@ -11,8 +11,8 @@
         </div>
         <div v-else>
             <p>No tasks to show</p>
-            <button @click="createTask()">New Task</button>
         </div>
+        <router-link :to="{ name: 'TaskFormCreate' }"> Create </router-link>
     </div>
 </template>
 
@@ -66,10 +66,6 @@
                         //TODO: make a service for the requests?
                         this.updateAlert("Error", error.message, "error")
                     })
-            },
-
-            createTask() {
-                this.$router.push({ name: "TaskFormCreate" }).catch(() => {})
             },
         },
     }
