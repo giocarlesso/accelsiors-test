@@ -8,7 +8,6 @@ Vue.config.productionTip = false
 Vue.prototype.$http = Axios
 
 ////FIXME: deal with CORS?
-export const bus = new Vue()
 
 new Vue({
     el: "#app",
