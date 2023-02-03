@@ -2,7 +2,7 @@
     <div class="task-form">
         <div class="task-form-container">
             <!-- TODO: style these labels and put the required icon -->
-            <h2>{{ $route.params.task_id ? "Edit" : "Create" }} task</h2>
+            <h2>{{ editForm ? "Edit" : "Create" }} task</h2>
             <alert-notifications
                 :title="alertData.title"
                 :message="alertData.message"
@@ -37,11 +37,17 @@
                 <label for="">Comment</label>
                 <textarea class="input-form" v-model="comment" />
             </div>
+            <p v-if="errors.length">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                    <li v-for="error in errors" :key="error">{{ error }}</li>
+                </ul>
+            </p>
             <div class="task-form_buttons">
                 <!-- TODO: style these buttons -->
-                <button @click="$router.go(-1)">Cancel</button>
+                <router-link to="/task-view">Cancel</router-link>
                 <button @click.prevent="onSubmit">
-                    {{ $route.params.task_id ? "Save" : "Create" }} task
+                    {{ editForm ? "Save" : "Create" }} task
                 </button>
             </div>
         </div>
@@ -57,11 +63,19 @@
             AlertNotifications,
         },
 
+        props: {
+            editForm: {
+                type: Boolean,
+                default: false,
+            },
+        },
+
         data() {
             return {
                 activities: null,
                 tasks: null,
                 errors: [],
+                id: null,
                 date: null,
                 duration: null,
                 activity: null,
@@ -78,7 +92,7 @@
         created() {
             this.fetchActivities()
 
-            if (this.$route.params.task_id) {
+            if (this.editForm) {
                 this.fetchTasks()
             }
         },
@@ -124,6 +138,7 @@
                 }
 
                 const payload = {
+                    id: this.id,
                     date: this.date,
                     duration: this.duration,
                     activity: this.activities.find(
@@ -156,6 +171,7 @@
             fillForm() {
                 this.tasks.find(task => {
                     if (task.id == this.$route.params.task_id) {
+                        this.id = task.id
                         this.date = this.convertDate(task.date)
                         this.duration = task.duration
                         this.activity = task.activity.name
@@ -191,10 +207,10 @@
                 if (!this.activity) this.errors.push("Activity is required.")
 
                 //TODO: unique activity on the day
-                let message = this.errors.join("\n")
-                console.log(message)
 
-                this.updateAlert("Error", this.errors.join("\n"), "error")
+                if(this.errors.length > 0) {
+                    this.updateAlert("Error", this.errors.join("\n"), "error")
+                }
 
                 return this.errors.length <= 0
             },
