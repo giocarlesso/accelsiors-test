@@ -18,9 +18,6 @@
                     :task-item="task"
                 />
             </tbody>
-            <tr v-else id="no-data">
-                <td colspan="5">Table is em</td>
-            </tr>
         </table>
     </div>
 </template>
@@ -39,12 +36,6 @@
                 type: Array,
                 default: null,
             },
-        },
-
-        data() {
-            return {
-                isEditing: false,
-            }
         },
     }
 </script>
