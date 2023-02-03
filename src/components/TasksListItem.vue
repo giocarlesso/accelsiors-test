@@ -1,7 +1,13 @@
 <template>
     <tr>
         <td class="table-data">
-            <button @click="editTask()">Edit</button>
+            <router-link
+                :to="{
+                    name: 'TaskFormEdit',
+                    params: { task_id: taskItem.id },
+                }"
+                >Edit</router-link
+            >
         </td>
         <td class="table-data">
             <span>{{ taskItem.date | formatDate }}</span>
@@ -32,23 +38,6 @@
         filters: {
             formatDate: date => {
                 return new Date(date).toLocaleString()
-            },
-        },
-
-        data() {
-            return {
-                activities: null,
-            }
-        },
-
-        methods: {
-            editTask() {
-                this.$router
-                    .push({
-                        name: "TaskFormEdit",
-                        params: { task_id: this.taskItem.id },
-                    })
-                    .catch(() => {})
             },
         },
     }
