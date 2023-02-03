@@ -9,19 +9,23 @@ export default new Router({
     mode: "history",
     routes: [
         {
-            path: "/",
+            path: "/task-view",
             name: "TaskView",
             component: TaskView,
         },
         {
-            path: "/:task_id",
-            name: "TaskFormEdit",
-            component: TaskForm,
-        },
-        {
-            path: "/create",
+            path: "/task-view/create",
             name: "TaskFormCreate",
             component: TaskForm,
+            props: { editForm: false },
         },
+        {
+            path: "/task-view/:task_id",
+            name: "TaskFormEdit",
+            component: TaskForm,
+            props: { editForm: true },
+        },
+
+        { path: "*", redirect: { name: "TaskView" } },
     ],
 })
