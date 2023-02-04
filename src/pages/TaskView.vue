@@ -1,5 +1,6 @@
 <template>
     <div class="task-view">
+        <!-- GENERAL DESIGN, FOLDERS AND RESPONSIVITY -->
         <alert-notifications
             :title="alertData.title"
             :message="alertData.message"

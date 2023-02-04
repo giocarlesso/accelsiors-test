@@ -25,6 +25,7 @@
 </template>
 
 <script>
+    // import { format } from "date-fns"
     export default {
         name: "TasksListItem",
 
@@ -32,12 +33,6 @@
             taskItem: {
                 type: Object,
                 default: null,
-            },
-        },
-
-        filters: {
-            formatDate: date => {
-                return new Date(date).toLocaleString()
             },
         },
     }

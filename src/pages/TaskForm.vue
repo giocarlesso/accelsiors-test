@@ -2,16 +2,16 @@
     <div class="task-form">
         <div class="task-form-container">
             <!-- TODO: style these labels and put the required icon -->
-            <h2>{{ editForm ? "Edit" : "Create" }} task</h2>
             <alert-notifications
                 :title="alertData.title"
                 :message="alertData.message"
                 :alertType="alertData.alertType"
                 :showAlert="alertData.showAlert"
             />
+            <h2>{{ editForm ? "Edit" : "Create" }} task</h2>
             <div class="input-group">
                 <label for="">Date</label>
-                <input class="input-form" type="date" v-model="date" required />
+                <input class="input-form" type="date" v-model="date" />
             </div>
             <div class="input-group">
                 <label for="">Duration</label>
@@ -93,10 +93,7 @@
 
         created() {
             this.fetchActivities()
-
-            if (this.editForm) {
-                this.fetchTasks()
-            }
+            this.fetchTasks()
         },
 
         methods: {
@@ -124,11 +121,6 @@
                 TasksService.listTasks()
                     .then(({ data }) => {
                         this.tasks = data
-                        this.updateAlert(
-                            "Success",
-                            "Tasks loaded sucessfully",
-                            "success"
-                        )
                         this.fillForm()
                     })
                     .catch(error => {
@@ -145,27 +137,22 @@
                     date: this.date,
                     duration: this.duration,
                     activity: this.activities.find(
-                        act => act.name == this.activity
+                        activity => activity.name == this.activity
                     ),
                     comment: this.comment,
                 }
 
-                this.$http
-                    .post("http://localhost:8888/test/saveTask", payload, {
-                        
-                    })
-                    .then(() => {
-                        this.updateAlert(
-                            "Success",
-                            "Task successfully saved",
-                            "success"
-                        )
-                    })
-                    .catch(error => {
-                        //TODO: make a service for the requests?
-                        this.updateAlert("Error", error.message, "error")
-                    })
-                    .finally(this.$router.go(-1))
+                TasksService.saveTasks(payload).then(({ data }) => {
+                    this.updateAlert(
+                        "Success",
+                        data,
+                        "success"
+                    )
+                    this.$router.push({ path: '/task-view' })
+                })
+                .catch(error => {
+                    this.updateAlert("Error", error.message, "error")
+                })
             },
             fillForm() {
                 this.tasks.find(task => {
@@ -179,10 +166,7 @@
                 })
             },
             convertDate(date) {
-                date = new Date(date)
-                const offset = date.getTimezoneOffset()
-                date = new Date(date.getTime() - offset * 60 * 1000)
-                return date.toISOString().split("T")[0]
+                return date.split("T")[0]
             },
             validateForm() {
                 this.errors = []
@@ -194,18 +178,23 @@
                 if (!this.duration) {
                     this.errors.push("Duration is required.")
                 }
-                if (this.duration > 12 || this.duration < 0.5) {
+
+                if (this.duration && (this.duration > 12 || this.duration < 0.5)) {
                     this.errors.push("Duration must be between 0.5 and 12.")
                 }
+                
                 if (
                     this.duration &&
-                    !this.validateDurationSteps(this.duration)
+                    this.remainderIsNotZero(this.duration)
                 ) {
                     this.errors.push("Duration must be an increment of 0.5.")
                 }
+
                 if (!this.activity) this.errors.push("Activity is required.")
 
-                //TODO: unique activity on the day
+                if (this.editForm === false && this.activityExistsInThatDay()) {
+                    this.errors.push("Activity must be unique in the day.")
+                }
 
                 if(this.errors.length > 0) {
                     this.updateAlert("Error", this.errors.join("\n"), "error")
@@ -213,9 +202,12 @@
 
                 return this.errors.length <= 0
             },
-            validateDurationSteps(duration) {
-                return duration % 0.5 == 0
+            remainderIsNotZero(duration) {
+                return Number(duration) % 0.5 !== 0
             },
+            activityExistsInThatDay() {
+                return this.tasks.some(task => (this.convertDate(task.date) == this.date) && (task.activity.name == this.activity))
+            }
         },
     }
 </script>

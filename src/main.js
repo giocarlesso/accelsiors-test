@@ -4,7 +4,11 @@ import router from "./router"
 
 Vue.config.productionTip = false
 
-////FIXME: deal with CORS?
+//FIXME: deal with CORS?
+
+Vue.filter("formatDate", date => {
+    return date.split("T")[0]
+})
 
 new Vue({
     el: "#app",

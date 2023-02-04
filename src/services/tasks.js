@@ -6,6 +6,6 @@ export default {
     },
 
     saveTasks: async data => {
-        return await api.post("/saveTasks", data)
+        return await api.post("/saveTask", data)
     },
 }
