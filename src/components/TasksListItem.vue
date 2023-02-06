@@ -2,6 +2,7 @@
     <tr>
         <td class="table-data">
             <router-link
+                tag="button"
                 :to="{
                     name: 'TaskFormEdit',
                     params: { task_id: taskItem.id },
@@ -13,7 +14,7 @@
             <span>{{ taskItem.date | formatDate }}</span>
         </td>
         <td class="table-data">
-            <span>{{ taskItem.duration }}</span>
+            <span>{{ formatDuration }}</span>
         </td>
         <td class="table-data">
             <span>{{ taskItem.activity.name }}</span>
@@ -33,6 +34,17 @@
             taskItem: {
                 type: Object,
                 default: null,
+            },
+        },
+        computed: {
+            formatDuration() {
+                const duration = this.taskItem.duration
+                if (duration == "0.5") {
+                    return "30 minutes"
+                } else if (duration == "1") {
+                    return duration + " hour"
+                }
+                return duration + " hours"
             },
         },
     }
