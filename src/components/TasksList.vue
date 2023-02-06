@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import { mapGetters } from "vuex"
     import TasksListItem from "@/components/TasksListItem"
 
     export default {
@@ -31,11 +32,11 @@
         components: {
             TasksListItem,
         },
-        props: {
-            tasks: {
-                type: Array,
-                default: null,
-            },
+
+        computed: {
+            ...mapGetters({
+                tasks: "getTasks",
+            }),
         },
     }
 </script>
