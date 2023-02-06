@@ -1,5 +1,6 @@
 <template>
     <div :class="['alert-notifications', alertType]" v-if="showAlert">
+        <!-- TODO: deal with overflows and general style -->
         <h2>{{ title }}</h2>
         <pre>{{ message }}</pre>
     </div>
