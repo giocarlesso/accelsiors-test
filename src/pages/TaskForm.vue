@@ -45,8 +45,8 @@
             </p>
             <div class="task-form_buttons">
                 <!-- TODO: style these buttons -->
-                <router-link to="/task-view">Cancel</router-link>
-                <button @click.prevent="onSubmit">
+                <router-link tag="button" to="/task-view">Cancel</router-link>
+                <button @click="submitTask">
                     {{ editForm ? "Save" : "Create" }} task
                 </button>
             </div>
@@ -56,8 +56,9 @@
 
 <script>
     import AlertNotifications from "@/components/AlertNotifications"
-    import TasksService from "../services/tasks"
-    import ActivitiesService from "../services/activities"
+    import ActivitiesService from "../services/activities"   
+    import TasksService from "../services/tasks" 
+    import { mapGetters } from "vuex"
 
     export default {
         name: "TaskForm",
@@ -75,7 +76,6 @@
         data() {
             return {
                 activities: null,
-                tasks: null,
                 errors: [],
                 id: null,
                 date: null,
@@ -93,7 +93,13 @@
 
         created() {
             this.fetchActivities()
-            this.fetchTasks()
+            this.fillForm()
+        },
+
+        computed: {
+            ...mapGetters({
+                tasks: "getTasks"
+            }),
         },
 
         methods: {
@@ -117,17 +123,7 @@
                         )
                     })
             },
-            fetchTasks() {
-                TasksService.listTasks()
-                    .then(({ data }) => {
-                        this.tasks = data
-                        this.fillForm()
-                    })
-                    .catch(error => {
-                        this.updateAlert("Error", error.message, "error")
-                    })
-            },
-            onSubmit() {
+            submitTask() {
                 if (!this.validateForm()) {
                     return
                 }

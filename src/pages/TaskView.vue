@@ -8,12 +8,14 @@
             :showAlert="alertData.showAlert"
         />
         <div v-if="tasks">
-            <tasks-list v-if="tasks" :tasks="tasks" />
+            <tasks-list v-if="tasks" />
         </div>
         <div v-else>
             <p>No tasks to show</p>
         </div>
-        <router-link :to="{ name: 'TaskFormCreate' }"> Create </router-link>
+        <router-link tag="button" :to="{ name: 'TaskFormCreate' }">
+            Create
+        </router-link>
     </div>
 </template>
 
@@ -21,6 +23,7 @@
     import TasksList from "@/components/TasksList.vue"
     import AlertNotifications from "@/components/AlertNotifications"
     import TasksService from "../services/tasks"
+    import { mapActions } from "vuex"
 
     export default {
         name: "TaskView",
@@ -46,6 +49,9 @@
         },
 
         methods: {
+            ...mapActions({
+                setTasks: "setTasks",
+            }),
             updateAlert(title, message, alertType) {
                 this.alertData = { title, message, alertType, showAlert: true }
 
@@ -57,6 +63,7 @@
                 TasksService.listTasks()
                     .then(({ data }) => {
                         this.tasks = data
+                        this.$store.dispatch("setTasks", data)
                         this.updateAlert(
                             "Success",
                             "Tasks loaded sucessfully",
