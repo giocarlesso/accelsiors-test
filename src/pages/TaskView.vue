@@ -8,7 +8,7 @@
             :showAlert="alertData.showAlert"
         />
         <div v-if="tasks">
-            <tasks-list v-if="tasks" />
+            <tasks-list v-if="tasks" :tasks="tasks" />
         </div>
         <div v-else>
             <p>No tasks to show</p>

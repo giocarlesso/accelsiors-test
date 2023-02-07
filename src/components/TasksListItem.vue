@@ -1,7 +1,8 @@
 <template>
-    <tr>
+    <tr class="row">
         <td class="table-data">
             <router-link
+                class="link-button"
                 tag="button"
                 :to="{
                     name: 'TaskFormEdit',
@@ -11,22 +12,21 @@
             >
         </td>
         <td class="table-data">
-            <span>{{ taskItem.date | formatDate }}</span>
+            <span class="date">{{ taskItem.date | formatDate }}</span>
         </td>
         <td class="table-data">
-            <span>{{ formatDuration }}</span>
+            <span class="duration">{{ formatDuration }}</span>
         </td>
         <td class="table-data">
-            <span>{{ taskItem.activity.name }}</span>
+            <span class="activity">{{ taskItem.activity.name }}</span>
         </td>
         <td class="table-data">
-            <span>{{ taskItem.comment }}</span>
+            <span class="comment">{{ taskItem.comment }}</span>
         </td>
     </tr>
 </template>
 
 <script>
-    // import { format } from "date-fns"
     export default {
         name: "TasksListItem",
 
