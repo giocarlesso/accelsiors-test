@@ -27,6 +27,7 @@
 </template>
 
 <script>
+    import { formatDate } from "@/filters"
     export default {
         name: "TasksListItem",
 
@@ -36,6 +37,8 @@
                 default: null,
             },
         },
+
+        filters: { formatDate },
 
         computed: {
             formatDuration() {
