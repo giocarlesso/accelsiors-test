@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        tasks: {},
+        tasks: [],
     },
     actions: {
         setTasks({ commit }, tasks) {

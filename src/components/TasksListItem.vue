@@ -36,6 +36,7 @@
                 default: null,
             },
         },
+
         computed: {
             formatDuration() {
                 const duration = this.taskItem.duration
@@ -52,8 +53,40 @@
 
 <style scoped>
     .table-data {
-        border: 1px solid black;
         padding: 5px;
-        vertical-align: initial;
+    }
+
+    .row:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .row:hover {
+        background-color: #ddd;
+    }
+
+    .table-data {
+        text-align: center;
+    }
+
+    .link-button {
+        width: 50px;
+        height: 28px;
+        color: #113d6f;
+        background-color: #fff;
+        border: 1px solid #113d6f;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .link-button:hover {
+        color: #fff;
+        background-color: #0b3666;
+        border: 3px solid #0b3666;
+    }
+
+    .link-button:active {
+        color: #fff;
+        background-color: #07213d;
+        border: 3px solid #07213d;
     }
 </style>

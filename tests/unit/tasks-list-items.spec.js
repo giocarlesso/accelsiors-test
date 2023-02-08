@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount, RouterLinkStub } from "@vue/test-utils"
+import { createLocalVue, mount, RouterLinkStub } from "@vue/test-utils"
 import TasksListItem from "@/components/TasksListItem"
 import { formatDate } from "@/filters"
 
@@ -7,7 +7,7 @@ describe("tasks-list-item", () => {
 
     localVue.filter("formatDate", formatDate)
 
-    const wrapper = shallowMount(TasksListItem, {
+    const wrapper = mount(TasksListItem, {
         localVue,
         mocks: {
             $route: {
@@ -38,7 +38,7 @@ describe("tasks-list-item", () => {
         expect(component.exists()).toBeTruthy()
     })
 
-    test("router-link should contain the parameters", () => {
+    test("router-link should exist and contain specific parameters", () => {
         const routerLink = wrapper.find(".link-button")
         expect(routerLink.vm.$route.params.task_id).toBe(1)
     })

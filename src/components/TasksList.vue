@@ -1,6 +1,5 @@
 <template>
     <div class="tasks-list">
-        <h2>Activities List</h2>
         <table id="table">
             <thead class="table-head">
                 <tr class="table-row-header">
@@ -42,8 +41,8 @@
 </script>
 
 <style scoped>
-    #table-container {
-        overflow-x: auto;
+    .tasks-list {
+        padding-top: 50px;
     }
 
     #table {
@@ -52,13 +51,9 @@
     }
 
     .table-header {
-        border: 1px solid black;
+        border: 1px solid #ddd;
+        background-color: #185685;
+        color: #fff;
         padding: 15px 5px;
-    }
-
-    .table-data {
-        border: 1px solid black;
-        padding: 5px;
-        vertical-align: initial;
     }
 </style>

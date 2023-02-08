@@ -7,11 +7,6 @@ Vue.config.productionTip = false
 
 //FIXME: deal with CORS?
 
-Vue.filter("formatDate", date => {
-    //TODO: search stuff about timezone offset
-    return date.split("T")[0]
-})
-
 new Vue({
     el: "#app",
     router,

@@ -1,6 +1,10 @@
 <template>
     <div class="task-view">
         <!-- GENERAL DESIGN, FOLDERS AND RESPONSIVITY -->
+        <div class="task-view__header">
+            <h2 class="page-title">Task view</h2>
+            <img :src="require('../assets/accelsiors-logo.png')" />
+        </div>
         <alert-notifications
             :title="alertData.title"
             :message="alertData.message"
@@ -10,20 +14,26 @@
         <div v-if="tasks">
             <tasks-list v-if="tasks" :tasks="tasks" />
         </div>
-        <div v-else>
+        <div class="no-tasks" v-else>
             <p>No tasks to show</p>
         </div>
-        <router-link tag="button" :to="{ name: 'TaskFormCreate' }">
-            Create
-        </router-link>
+        <div class="task-view__footer">
+            <router-link
+                class="link-button"
+                tag="button"
+                :to="{ name: 'TaskFormCreate' }"
+            >
+                Create new task
+            </router-link>
+        </div>
     </div>
 </template>
 
 <script>
     import TasksList from "@/components/TasksList.vue"
     import AlertNotifications from "@/components/AlertNotifications"
-    import TasksService from "../services/tasks"
     import { mapActions } from "vuex"
+    import TasksService from "../services/tasks"
 
     export default {
         name: "TaskView",
@@ -66,7 +76,7 @@
                         this.$store.dispatch("setTasks", data)
                         this.updateAlert(
                             "Success",
-                            "Tasks loaded sucessfully",
+                            "Tasks loaded successfully",
                             "success"
                         )
                     })
@@ -78,4 +88,50 @@
     }
 </script>
 
-<style></style>
+<style scoped>
+    .task-view {
+        margin: 25px;
+    }
+
+    .page-title {
+        display: flex;
+        align-self: self-end;
+        color: #185685;
+        font-size: 36px;
+        text-decoration-line: underline;
+    }
+
+    .task-view__header {
+        display: flex;
+        place-content: space-between;
+    }
+
+    .task-view__footer {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .link-button {
+        width: 120px;
+        height: 50px;
+        color: #fff;
+        background-color: #113d6f;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .link-button:hover {
+        color: #0b3666;
+        background-color: #fff;
+        border: 1px solid #0b3666;
+    }
+
+    .link-button:active {
+        color: #fff;
+        background-color: #07213d;
+        border: 3px solid #07213d;
+    }
+</style>
