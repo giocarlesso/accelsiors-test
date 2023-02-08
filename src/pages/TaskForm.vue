@@ -8,47 +8,50 @@
                 :alertType="alertData.alertType"
                 :showAlert="alertData.showAlert"
             />
-            <h2>{{ editForm ? "Edit" : "Create" }} task</h2>
-            <div class="input-group">
-                <label for="">Date</label>
-                <input class="input-form" type="date" v-model="date" />
-            </div>
-            <div class="input-group">
-                <label for="">Duration</label>
-                <input
-                    class="input-form"
-                    type="number"
-                    step="0.5"
-                    min="0.5"
-                    max="12"
-                    required
-                    v-model="duration"
-                />
-            </div>
-            <div class="input-group">
-                <label for="">Activity</label>
-                <select class="input-form" v-model="activity">
-                    <option v-for="activity in activities" :key="activity.id">
-                        {{ activity.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="">Comment</label>
-                <textarea class="input-form" v-model="comment" />
-            </div>
-            <p v-if="errors.length">
-                <b>Please correct the following error(s):</b>
-                <ul>
-                    <li v-for="error in errors" :key="error">{{ error }}</li>
-                </ul>
-            </p>
-            <div class="task-form_buttons">
-                <!-- TODO: style these buttons -->
-                <router-link tag="button" to="/task-view">Cancel</router-link>
-                <button @click="submitTask">
-                    {{ editForm ? "Save" : "Create" }} task
-                </button>
+            <div v-if="taskExists">
+                <h2 class="page-title">
+                    {{ editForm ? "Edit" : "Create" }} task
+                </h2>
+                <div class="input-group">
+                    <label for="">Date</label>
+                    <input class="input-form" type="date" v-model="date" />
+                </div>
+                <div class="input-group">
+                    <label for="">Duration</label>
+                    <input
+                        class="input-form"
+                        type="number"
+                        step="0.5"
+                        min="0.5"
+                        max="12"
+                        required
+                        v-model="duration"
+                    />
+                </div>
+                <div class="input-group">
+                    <label for="">Activity</label>
+                    <select class="input-form" v-model="activity">
+                        <option
+                            v-for="activity in activities"
+                            :key="activity.id"
+                        >
+                            {{ activity.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="">Comment</label>
+                    <textarea class="input-form" v-model="comment" />
+                </div>
+                <div class="task-form_buttons">
+                    <!-- TODO: style these buttons -->
+                    <router-link tag="button" to="/task-view"
+                        >Cancel</router-link
+                    >
+                    <button @click="submitTask">
+                        {{ editForm ? "Save" : "Create" }} task
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -56,8 +59,8 @@
 
 <script>
     import AlertNotifications from "@/components/AlertNotifications"
-    import ActivitiesService from "../services/activities"   
-    import TasksService from "../services/tasks" 
+    import ActivitiesService from "../services/activities"
+    import TasksService from "../services/tasks"
     import { mapGetters } from "vuex"
 
     export default {
@@ -75,12 +78,11 @@
 
         data() {
             return {
-                activities: null,
-                errors: [],
                 id: null,
                 date: null,
                 duration: null,
                 activity: null,
+                activities: null,
                 comment: null,
                 alertData: {
                     showAlert: false,
@@ -88,18 +90,22 @@
                     message: "",
                     alertType: "",
                 },
+                errors: [],
+                taskExists: true,
             }
         },
 
         created() {
+            if (this.$store && this.getTasks.length) {
+                this.fillForm()
+            } else {
+                this.fetchTasks()
+            }
             this.fetchActivities()
-            this.fillForm()
         },
 
         computed: {
-            ...mapGetters({
-                tasks: "getTasks"
-            }),
+            ...mapGetters(["getTasks"]),
         },
 
         methods: {
@@ -110,15 +116,28 @@
                     this.alertData.showAlert = false
                 }, 3000)
             },
+            fetchTasks() {
+                TasksService.listTasks()
+                    .then(({ data }) => {
+                        this.checkForParameterExistance(data)
+                    })
+                    .catch(error => {
+                        this.updateAlert(
+                            "Tasks failed to load",
+                            error.message,
+                            "error"
+                        )
+                    })
+            },
             fetchActivities() {
-                    ActivitiesService.listActivities()
+                ActivitiesService.listActivities()
                     .then(({ data }) => {
                         this.activities = data
                     })
                     .catch(error => {
                         this.updateAlert(
-                            "Error",
-                            `Activities failed do load\n ${error.message}`,
+                            "Activities failed do load",
+                            error.message,
                             "error"
                         )
                     })
@@ -138,20 +157,27 @@
                     comment: this.comment,
                 }
 
-                TasksService.saveTasks(payload).then(({ data }) => {
-                    this.updateAlert(
-                        "Success",
-                        data,
-                        "success"
-                    )
-                    this.$router.push({ path: '/task-view' })
-                })
-                .catch(error => {
-                    this.updateAlert("Error", error.message, "error")
-                })
+                TasksService.saveTasks(payload)
+                    .then(({ data }) => {
+                        this.updateAlert(
+                            data,
+                            "Going back to the task view in 3 seconds",
+                            "success"
+                        )
+                        setTimeout(() => {
+                            this.$router.push({ path: "/task-view" })
+                        }, 3000)
+                    })
+                    .catch(error => {
+                        this.updateAlert(
+                            "Task failed to save",
+                            error.message,
+                            "error"
+                        )
+                    })
             },
-            fillForm() {
-                this.tasks.find(task => {
+            fillForm(tasks = this.getTasks) {
+                tasks.find(task => {
                     if (task.id == this.$route.params.task_id) {
                         this.id = task.id
                         this.date = this.convertDate(task.date)
@@ -175,24 +201,24 @@
                     this.errors.push("Duration is required.")
                 }
 
-                if (this.duration && (this.duration > 12 || this.duration < 0.5)) {
-                    this.errors.push("Duration must be between 0.5 and 12.")
-                }
-                
                 if (
                     this.duration &&
-                    this.remainderIsNotZero(this.duration)
+                    (this.duration > 12 || this.duration < 0.5)
                 ) {
+                    this.errors.push("Duration must be between 0.5 and 12.")
+                }
+
+                if (this.duration && this.remainderIsNotZero(this.duration)) {
                     this.errors.push("Duration must be an increment of 0.5.")
                 }
 
                 if (!this.activity) this.errors.push("Activity is required.")
 
-                if (this.editForm === false && this.activityExistsInThatDay()) {
+                if (this.activityExistsInThatDay()) {
                     this.errors.push("Activity must be unique in the day.")
                 }
 
-                if(this.errors.length > 0) {
+                if (this.errors.length > 0) {
                     this.updateAlert("Error", this.errors.join("\n"), "error")
                 }
 
@@ -202,8 +228,40 @@
                 return Number(duration) % 0.5 !== 0
             },
             activityExistsInThatDay() {
-                return this.tasks.some(task => (this.convertDate(task.date) == this.date) && (task.activity.name == this.activity))
-            }
+                return this.getTasks
+                    .filter(task => task.id != this.id)
+                    .some(
+                        task =>
+                            this.convertDate(task.date) == this.date &&
+                            task.activity.name == this.activity
+                    )
+            },
+            checkForParameterExistance(tasks) {
+                const checkForParameter = tasks.some(
+                    task => task.id == parseInt(this.$route.params.task_id)
+                )
+
+                if (checkForParameter) {
+                    this.updateAlert(
+                        "Success",
+                        `Task ${this.$route.params.task_id} loaded successfully`,
+                        "success"
+                    )
+                    this.fillForm(tasks)
+                } else {
+                    this.taskExists = false
+                    this.updateAlert(
+                        "Error",
+                        `Task ${this.$route.params.task_id} does not exist
+
+Going back to the task view in 3 seconds`,
+                        "error"
+                    )
+                    setTimeout(() => {
+                        this.$router.push({ name: "TaskView" })
+                    }, 3000)
+                }
+            },
         },
     }
 </script>

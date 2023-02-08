@@ -1,13 +1,8 @@
-import { mount, RouterLinkStub } from "@vue/test-utils"
+import { shallowMount, RouterLinkStub } from "@vue/test-utils"
 import TaskForm from "@/pages/TaskForm"
-import Vue from "vue"
-import Vuex from "vuex"
-
-Vue.use(Vuex)
-Vue.prototype.$store = new Vuex.Store()
 
 describe("task-form", () => {
-    const wrapper = mount(TaskForm, {
+    const wrapper = shallowMount(TaskForm, {
         propsData: {
             editForm: true,
             id: 1,
@@ -23,19 +18,14 @@ describe("task-form", () => {
             RouterLink: RouterLinkStub,
         },
     })
+
     test("component should render", () => {
         const component = wrapper.find(".task-form")
         expect(component.exists()).toBeTruthy()
     })
 
-    // test("should render a text if there are no tasks", () => {
-    //     let noTasksDiv = wrapper.find(".no-tasks")
-    //     expect(noTasksDiv.text()).toBe("No tasks to show")
-    // })
-
-    // test("router-link should exist and contain specific parameters", () => {
-    //     const routerLink = wrapper.find(".link-button")
-    //     console.log(routerLink.vm.$route.name)
-    //     expect(routerLink.vm.$route.name).toBe("TaskFormCreate")
-    // })
+    test("page title should be Edit task", () => {
+        const element = wrapper.find(".page-title")
+        expect(element.text()).toBe("Edit task")
+    })
 })
