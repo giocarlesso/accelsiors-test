@@ -38,7 +38,6 @@ describe("task-view", () => {
 
     test("router-link should exist and contain specific parameters", () => {
         const routerLink = wrapper.find(".link-button")
-        console.log(routerLink.vm.$route.name)
         expect(routerLink.vm.$route.name).toBe("TaskFormCreate")
     })
 })
