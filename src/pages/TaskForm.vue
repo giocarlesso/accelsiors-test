@@ -14,12 +14,12 @@
                 </h2>
                 <div class="input-group">
                     <label for="">Date</label>
-                    <input class="input-form" type="date" v-model="date" />
+                    <input class="input-form date" type="date" v-model="date" />
                 </div>
                 <div class="input-group">
                     <label for="">Duration</label>
                     <input
-                        class="input-form"
+                        class="input-form duration"
                         type="number"
                         step="0.5"
                         min="0.5"
@@ -30,7 +30,8 @@
                 </div>
                 <div class="input-group">
                     <label for="">Activity</label>
-                    <select class="input-form" v-model="activity">
+                    <select class="input-form activity" v-model="activity">
+                        <option disabled value="select">Select activity</option>
                         <option
                             v-for="activity in activities"
                             :key="activity.id"
@@ -41,14 +42,17 @@
                 </div>
                 <div class="input-group">
                     <label for="">Comment</label>
-                    <textarea class="input-form" v-model="comment" />
+                    <textarea class="input-form comment" v-model="comment" />
                 </div>
                 <div class="task-form_buttons">
                     <!-- TODO: style these buttons -->
-                    <router-link tag="button" to="/task-view"
+                    <router-link
+                        class="link-button"
+                        tag="button"
+                        to="/task-view"
                         >Cancel</router-link
                     >
-                    <button @click="submitTask">
+                    <button @click="submitTask" class="submit-button">
                         {{ editForm ? "Save" : "Create" }} task
                     </button>
                 </div>
