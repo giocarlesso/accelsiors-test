@@ -14,13 +14,13 @@ export default new Router({
             component: TaskView,
         },
         {
-            path: "/task-view/create",
+            path: "/task/create",
             name: "TaskFormCreate",
             component: TaskForm,
             props: { editForm: false },
         },
         {
-            path: "/task-view/:task_id",
+            path: "/task/:task_id",
             name: "TaskFormEdit",
             component: TaskForm,
             props: { editForm: true },
