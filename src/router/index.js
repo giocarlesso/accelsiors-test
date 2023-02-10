@@ -1,7 +1,7 @@
 import Vue from "vue"
 import Router from "vue-router"
-import TaskView from "../pages/TaskView.vue"
-import TaskForm from "../pages/TaskForm.vue"
+import TaskView from "@/views/TaskView.vue"
+import TaskForm from "@/views/TaskForm.vue"
 
 Vue.use(Router)
 
@@ -14,13 +14,13 @@ export default new Router({
             component: TaskView,
         },
         {
-            path: "/task/create",
+            path: "/task-view/create",
             name: "TaskFormCreate",
             component: TaskForm,
             props: { editForm: false },
         },
         {
-            path: "/task/:task_id",
+            path: "/task-view/:task_id",
             name: "TaskFormEdit",
             component: TaskForm,
             props: { editForm: true },
