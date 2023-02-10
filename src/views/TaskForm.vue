@@ -32,7 +32,6 @@
                 <textarea class="input-form comment" v-model="comment" />
             </div>
             <div class="task-form__buttons">
-                <!-- TODO: style these buttons -->
                 <router-link
                     class="btn link-button"
                     tag="button"
@@ -58,7 +57,7 @@
     import ActivitiesService from "@/services/activities"
     import TopBar from "@/components/TopBar"
     import LoadingNotification from "@/components/LoadingNotification"
-    import TasksService from "../services/tasks"
+    import TasksService from "@/services/tasks"
     import { mapGetters } from "vuex"
 
     export default {
@@ -96,6 +95,7 @@
         },
 
         created() {
+            //checking if there are tasks stored in the vuex store to save a request
             if (this.$store && this.getTasks.length) {
                 this.fillForm()
             } else {
@@ -135,7 +135,7 @@
                 this.isLoading = true
                 TasksService.listTasks()
                     .then(({ data }) => {
-                        this.checkForParameterExistance(data)
+                        this.checkForParameterExistence(data)
                     })
                     .catch(error => {
                         this.updateAlert(
@@ -232,6 +232,7 @@
                 return Number(duration) % 0.5 !== 0
             },
             activityExistsInThatDay() {
+                //find if any activity is already marked for a specific day excluding the activity being edited
                 return this.getTasks
                     .filter(task => task.id != this.id)
                     .some(
@@ -240,11 +241,15 @@
                             task.activity.name == this.activity
                     )
             },
-            checkForParameterExistance(tasks) {
-                const checkForRouteParameter =
+            checkForParameterExistence(tasks) {
+                //comparing the route for parameters that exists in the tasks list id's
+                //or if the url path is the create task path
+                //this was a problem because you could type anything in the url after the /task-view (ex: /task-view/google)
+                const checkIfRouterParameterIsValid =
                     tasks.some(task => task.id == this.$route.params.task_id) ||
                     this.$route.fullPath === "/task-view/create"
-                if (checkForRouteParameter) {
+
+                if (checkIfRouterParameterIsValid) {
                     if (this.$route.params.task_id) {
                         this.updateAlert(
                             "Success",
@@ -254,6 +259,8 @@
                         this.fillForm(tasks)
                     }
                 } else {
+                    //if the parameter typed in the url (ex: localhost/task-view/123)
+                    //is not in the task lits id's, it will show a message and rerout the user to the main page after 3 seconds
                     this.updateAlert(
                         "Error",
                         `Task ${this.$route.params.task_id} does not exist

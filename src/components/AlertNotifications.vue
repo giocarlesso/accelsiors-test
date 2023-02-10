@@ -49,10 +49,6 @@
         padding: 10px;
     }
 
-    .alert-notifications pre {
-        margin: 0;
-    }
-
     .success {
         background-color: #28a745;
     }

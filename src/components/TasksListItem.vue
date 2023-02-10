@@ -28,6 +28,7 @@
 
 <script>
     import { formatDate } from "@/filters"
+
     export default {
         name: "TasksListItem",
 

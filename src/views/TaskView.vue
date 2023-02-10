@@ -1,6 +1,5 @@
 <template>
     <div class="task-view">
-        <!-- GENERAL DESIGN, FOLDERS AND RESPONSIVITY -->
         <top-bar title="Task view" />
         <loading-notification :is-loading="isLoading" />
         <div class="task-view__body" v-if="!isLoading">
