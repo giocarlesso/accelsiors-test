@@ -35,7 +35,7 @@
         props: {
             taskItem: {
                 type: Object,
-                default: null,
+                required: true,
             },
         },
 

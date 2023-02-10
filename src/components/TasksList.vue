@@ -37,7 +37,7 @@
         props: {
             tasks: {
                 type: Array,
-                required: true,
+                default: null,
             },
         },
     }

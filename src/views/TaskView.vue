@@ -11,7 +11,7 @@
                 Create new task
             </router-link>
             <div v-if="!isLoading">
-                <tasks-list v-if="tasks" :tasks="tasks" />
+                <tasks-list :tasks="tasks" />
             </div>
         </div>
         <alert-notifications
