@@ -2,7 +2,10 @@
     <div class="top-bar">
         <div class="top-bar__header">
             <h2 class="page-title">{{ title }}</h2>
-            <img :src="require('../assets/accelsiors-logo.png')" />
+            <img
+                :src="require('../assets/accelsiors-logo.png')"
+                class="logo-image"
+            />
         </div>
         <hr class="top-bar__separator" />
     </div>
@@ -22,7 +25,6 @@
 <style scoped>
     .top-bar {
         width: 100%;
-        margin-top: 25px;
     }
 
     .top-bar__header {
@@ -39,5 +41,21 @@
 
     .top-bar__separator {
         margin: 25px 0;
+    }
+
+    .logo-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    @media screen and (max-width: 480px) {
+        .top-bar__header {
+            place-content: center;
+            flex-wrap: wrap-reverse;
+        }
+
+        .logo-image {
+            padding-bottom: 25px;
+        }
     }
 </style>

@@ -49,10 +49,6 @@
         padding: 10px;
     }
 
-    .alert-notifications h2 {
-        margin: 0 0 15px 0;
-    }
-
     .alert-notifications pre {
         margin: 0;
     }

@@ -17,6 +17,9 @@
                     :task-item="task"
                 />
             </tbody>
+            <tbody v-else class="table-body-empty">
+                No tasks to show...
+            </tbody>
         </table>
     </div>
 </template>
@@ -42,7 +45,7 @@
 
 <style scoped>
     .tasks-list {
-        padding-top: 50px;
+        padding-top: 20px;
     }
 
     #table {
@@ -55,5 +58,11 @@
         background-color: #185685;
         color: #fff;
         padding: 15px 5px;
+    }
+
+    .table-body-empty:before {
+        content: "";
+        display: block;
+        height: 25px;
     }
 </style>
