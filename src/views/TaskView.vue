@@ -76,12 +76,16 @@
                         this.$store.dispatch("setTasks", data)
                         this.updateAlert(
                             "Success",
-                            "Tasks loaded successfully",
+                            `${data.length} tasks loaded successfully`,
                             "success"
                         )
                     })
                     .catch(error => {
-                        this.updateAlert("Error", error.message, "error")
+                        this.updateAlert(
+                            "Tasks failed to load",
+                            error.message,
+                            "error"
+                        )
                     })
                     .finally(() => {
                         this.isLoading = false
