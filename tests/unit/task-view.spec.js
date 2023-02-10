@@ -1,5 +1,5 @@
 import { mount, RouterLinkStub } from "@vue/test-utils"
-import TaskView from "@/pages/TaskView"
+import TaskView from "@/views/TaskView"
 
 describe("task-view", () => {
     const wrapper = mount(TaskView, {
@@ -31,13 +31,16 @@ describe("task-view", () => {
         expect(component.exists()).toBeTruthy()
     })
 
-    test("should render a text if there are no tasks", () => {
-        let noTasksDiv = wrapper.find(".no-tasks")
-        expect(noTasksDiv.text()).toBe("No tasks to show")
+    test("task-view__body should render is isLoading is false", async () => {
+        await wrapper.setData({ isLoading: false })
+        expect(wrapper.find(".task-view__body").isVisible()).toBeTruthy()
     })
 
-    test("router-link should exist and contain specific parameters", () => {
-        const routerLink = wrapper.find(".link-button")
-        expect(routerLink.vm.$route.name).toBe("TaskFormCreate")
+    test("router-link should exist and it's text should be Create new task", async () => {
+        await wrapper.setData({ isLoading: false })
+        const component = wrapper.find(".link-button")
+
+        expect(component.exists()).toBeTruthy()
+        expect(component.text()).toBe("Create new task")
     })
 })

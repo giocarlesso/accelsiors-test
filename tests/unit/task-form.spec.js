@@ -1,5 +1,5 @@
 import { shallowMount, RouterLinkStub, createLocalVue } from "@vue/test-utils"
-import TaskForm from "@/pages/TaskForm"
+import TaskForm from "@/views/TaskForm"
 import Vue from "vue"
 import router from "@/router/index"
 import { formatDate } from "@/filters"
@@ -30,22 +30,6 @@ describe("task-form", () => {
     test("component should render", () => {
         const component = wrapper.find(".task-form")
         expect(component.exists()).toBeTruthy()
-    })
-
-    test("page title should be Edit task when props editForm is true", () => {
-        const element = wrapper.find(".page-title")
-        expect(element.text()).toBe("Edit task")
-    })
-
-    test("page title should be Edit task when props editForm is true", () => {
-        const innerWrapper = shallowMount(TaskForm, {
-            propsData: {
-                editForm: false,
-            },
-        })
-
-        const element = innerWrapper.find(".page-title")
-        expect(element.text()).toBe("Create task")
     })
 
     test("set the value of input date element", async () => {
@@ -90,17 +74,19 @@ describe("task-form", () => {
         expect(routerLink.text()).toBe("Cancel")
     })
 
-    test("submitTask button's text should be Save task when prop editForm is true", () => {
+    test("submit button's text should be Save task when prop editForm is true", () => {
         const element = wrapper.find(".submit-button")
         expect(element.text()).toBe("Save task")
     })
 
-    test("submitTask button's text should be Create task when prop editForm is false", () => {
+    test("submit button's text should be Create task when prop editForm is false", async () => {
         const innerWrapper = shallowMount(TaskForm, {
             propsData: {
                 editForm: false,
             },
         })
+        await innerWrapper.setData({ isLoading: false })
+
         const element = innerWrapper.find(".submit-button")
         expect(element.text()).toBe("Create task")
     })

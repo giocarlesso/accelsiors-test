@@ -50,7 +50,6 @@ describe("tasks-list-item", () => {
 
     test("should render the duration field correctly and formatted", () => {
         let duration = wrapper.find(".duration")
-
         expect(duration.text()).toBe("1.5" + " hours")
     })
 
